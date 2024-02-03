@@ -5,13 +5,14 @@ import noprobro.shop.member.domain.Member;
 import noprobro.shop.member.repository.MemberRepository;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class MemberService {
+public class MemberService implements UserDetailsService {
 
   private final MemberRepository memberRepository;
 
@@ -28,9 +29,9 @@ public class MemberService {
     }
   }
 
+  @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     Member member = memberRepository.findByUsername(username);
-
     if (member == null) {
       throw new UsernameNotFoundException(username);
     }

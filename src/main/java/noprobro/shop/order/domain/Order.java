@@ -10,7 +10,7 @@ import noprobro.shop.member.domain.Member;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
+@Entity(name = "orders")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

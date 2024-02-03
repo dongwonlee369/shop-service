@@ -2,7 +2,6 @@ package noprobro.shop.order.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-import noprobro.shop.cart.domain.Cart;
 import noprobro.shop.global.domain.BaseEntity;
 import noprobro.shop.product.domain.Product;
 

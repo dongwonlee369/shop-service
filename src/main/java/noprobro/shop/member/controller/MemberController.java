@@ -39,11 +39,11 @@ public class MemberController {
       model.addAttribute("errorMessage", e.getMessage());
       return "members/createMemberForm";
     }
-    return "redirect:/";
+    return "members/memberLoginForm";
   }
 
   @GetMapping("/login")
   public String loginMember() {
-    return "members/login";
+    return "members/memberLoginForm";
   }
 }
