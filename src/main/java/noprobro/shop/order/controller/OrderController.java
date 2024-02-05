@@ -1,11 +1,11 @@
-package noprobro.shop.cart.controller;
+package noprobro.shop.order.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-@RequestMapping("/carts")
+@RequestMapping("/orders")
 @Controller
 @RequiredArgsConstructor
-public class CartController {
+public class OrderController {
 }

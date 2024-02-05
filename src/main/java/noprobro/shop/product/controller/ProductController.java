@@ -1,7 +1,9 @@
 package noprobro.shop.product.controller;
 
 import lombok.RequiredArgsConstructor;
+import noprobro.shop.product.common.ProductFormDto;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -11,7 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ProductController {
 
   @GetMapping("/add")
-  public String addProduct() {
+  public String addProduct(Model model) {
+    model.addAttribute("productFormDto", new ProductFormDto());
     return "admins/addProduct";
   }
 
