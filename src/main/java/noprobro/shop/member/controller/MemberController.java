@@ -46,4 +46,14 @@ public class MemberController {
   public String loginMember() {
     return "members/memberLoginForm";
   }
+
+  @GetMapping("cart")
+  public String cart() {
+    return "members/cart";
+  }
+
+  @GetMapping("orderList")
+  public String orderList() {
+    return "members/orderList";
+  }
 }
