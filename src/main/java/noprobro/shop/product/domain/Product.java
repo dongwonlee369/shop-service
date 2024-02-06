@@ -8,6 +8,7 @@ import lombok.*;
 import noprobro.shop.cart.domain.CartDetail;
 import noprobro.shop.global.domain.BaseEntity;
 import noprobro.shop.order.domain.OrderDetail;
+import noprobro.shop.product.common.ProductFormDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,4 +45,11 @@ public class Product extends BaseEntity {
   @ToString.Exclude
   @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
   private List<ProductImg> productImgs = new ArrayList<>();
+
+  public void updateProduct(ProductFormDto productFormDto) {
+    this.name = productFormDto.getName();
+    this.price = productFormDto.getPrice();
+    this.category = productFormDto.getCategory();
+    this.detail = productFormDto.getDetail();
+  }
 }
