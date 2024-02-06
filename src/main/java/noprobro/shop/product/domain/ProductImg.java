@@ -12,6 +12,10 @@ import lombok.*;
 @ToString
 public class ProductImg {
 
+  public static ProductImg createProductImg() {
+    return new ProductImg();
+  }
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;

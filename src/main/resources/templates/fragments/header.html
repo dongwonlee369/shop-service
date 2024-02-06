@@ -14,10 +14,10 @@
     <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
       <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
         <li class="nav-item" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
-          <a class="nav-link" href="/product/add">상품등록</a>
+          <a class="nav-link" href="/product/add">제품등록</a>
         </li>
         <li class="nav-item" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
-          <a class="nav-link" href="/product/manage">상품관리</a>
+          <a class="nav-link" href="/product/manage">제품관리</a>
         </li>
         <li class="nav-item" sec:authorize="isAuthenticated()">
           <a class="nav-link" href="/members/cart">장바구니</a>
