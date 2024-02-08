@@ -3,16 +3,101 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/layout1}">
 
+<th:block layout:fragment="script">
+  <script th:inline="javascript">
+      $(document).ready(function () {
+          let errorMessage = [[${errorMessage}]];
+          if (errorMessage != null) {
+              alert(errorMessage);
+          }
+          bindDomEvent();
+      });
+
+      function page(page) {
+          let searchDateType = $("#searchDateType").val();
+          let searchBy = $("#searchBy").val();
+          let searchQuery = $("#searchQuery").val();
+
+          location.href = "/products/`manage/" + page + "?searchDateType=" + searchDateType
+              + "&searchBy=" + searchBy
+              + "&searchQuery=" + searchQuery;
+      }
+  </script>
+</th:block>
+
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
   <style>
-      .error {
-          color: #bd2130;
+      select {
+          margin-right: 10px;
       }
   </style>
 </th:block>
-
 <div layout:fragment="content">
-  <h1>상품관리 페이지</h1>
+
+  <form th:action="@{'/products/manage' + ${products.number}}" role="form" method="get" th:object="${products}">
+    <table class="table">
+      <thead>
+      <tr>
+        <td>제품아이디</td>
+        <td>제품명</td>
+        <td>카테고리</td>
+        <td>등록일</td>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="product, status: ${products.getContent()}">
+        <td th:text="${product.id}"></td>
+        <td>
+          <a th:href="'/products/add/'+${product.id}" th:text="${product.name}"></a>
+        </td>
+        <td th:text="${product.category}"></td>
+        <td th:text="${product.createTime}"></td>
+      </tr>
+      </tbody>
+    </table>
+
+    <div th:with="start=${(products.number/maxPage)*maxPage + 1},
+     end=(${(products.totalPages == 0) ? 1 : (start + (maxPage - 1) < products.totalPages ? start + (maxPage - 1) : products.totalPages)})">
+
+      <ul class="pagination justify-content-center">
+        <!--Previous 이전 버튼-->
+        <li class="page-product" th:classappend="${products.first}?'disabled'">
+          <a th:onclick="'javascript:page(' + ${products.number - 1} + ')'" aria-label='Previous' class="page-link"
+             style="cursor : pointer;">
+            <span aria-hidden='true'>이전</span>
+          </a>
+        </li>
+        <!--페이지 요소들-->
+        <li class="page-product" th:each="page: ${#numbers.sequence(start, end)}"
+            th:classappend="${products.number eq (page - 1)}?'active':''">
+          <a th:onclick="'javascript:page(' + (page - 1) + ')'" th:inline="text" class="page-link"
+             style="cursor : pointer;">[[${page}]]</a>
+        </li>
+        <!--Next 다음 버튼-->
+        <li class="page-product" th:classappend="${products.last}?'disabled'">
+          <a th:onclick="'javascript:page(' + ${products.number + 1} + ')'" aria-label='Next' class="page-link"
+             style="cursor : pointer;">
+            <span aria-hidden='true'>다음</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="form-inline justify-content-center" th:object="${productSearchDto}">
+      <select th:field="*{searchDateType}" class="form-control" style="width:auto;">
+        <option value="all">전체기간</option>
+        <option value="1d">1일</option>
+        <option value="1w">1주</option>
+        <option value="1m">1개월</option>
+        <option value="6m">6개월</option>
+      </select>
+      <select th:field="*{searchBy}" class="form-control" style="width:auto;">
+        <option value="name">상품명</option>
+      </select>
+      <input th:field="*{searchQuery}" type="text" class="form-control" placeholder="검색어를 입력해주세요">
+      <button id="searchBtn" type="submit" class="btn btn-primary">검색</button>
+    </div>
+  </form>
 </div>
 </html>

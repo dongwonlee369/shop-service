@@ -4,7 +4,12 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import noprobro.shop.product.common.ProductFormDto;
+import noprobro.shop.product.common.ProductSearchDto;
+import noprobro.shop.product.domain.Product;
 import noprobro.shop.product.service.ProductService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,9 +17,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
-@RequestMapping("/product")
+@RequestMapping("/products")
 @RequiredArgsConstructor
 public class ProductController {
 
@@ -26,10 +32,10 @@ public class ProductController {
     return "admins/addProduct";
   }
 
-  @GetMapping("/manage")
-  public String manageProduct() {
-    return "admins/manageProduct";
-  }
+//  @GetMapping("/manage")
+//  public String manageProduct() {
+//    return "admins/manageProduct";
+//  }
 
   @PostMapping("/add")
   public String addProduct(@Valid ProductFormDto productFormDto, BindingResult bindingResult, Model model, @RequestParam(name = "productImgFile") List<MultipartFile> productImgFileList) {
@@ -86,5 +92,17 @@ public class ProductController {
       return "admins/addProduct";
     }
     return "redirect:/";
+  }
+
+  @GetMapping({"/manage", "/manage/{page}"})
+  public String productManage(ProductSearchDto productSearchDto,
+                              @PathVariable("page") Optional<Integer> page,
+                              Model model) {
+    Pageable pageable = PageRequest.of(page.orElse(0), 3);
+    Page<Product> products = productService.getAdminProductPage(productSearchDto, pageable);
+    model.addAttribute("products", products);
+    model.addAttribute("productSearchDto", productSearchDto);
+    model.addAttribute("maxPage", 5);
+    return "admins/manageProduct";
   }
 }
