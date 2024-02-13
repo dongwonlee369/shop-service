@@ -2,6 +2,7 @@ package noprobro.shop.product.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import noprobro.shop.product.common.HomeProductDto;
 import noprobro.shop.product.common.ProductFormDto;
 import noprobro.shop.product.common.ProductImgDto;
 import noprobro.shop.product.common.ProductSearchDto;
@@ -78,5 +79,10 @@ public class ProductService {
   @Transactional(readOnly = true)
   public Page<Product> getAdminProductPage(ProductSearchDto productSearchDto, Pageable pageable) {
     return productRepository.getAdminProductPage(productSearchDto, pageable);
+  }
+
+  @Transactional(readOnly = true)
+  public Page<HomeProductDto> getHomeProductPage(ProductSearchDto productSearchDto, Pageable pageable) {
+    return productRepository.getHomeProductPage(productSearchDto, pageable);
   }
 }

@@ -1,14 +1,19 @@
 package noprobro.shop.product.repository;
 
+import com.querydsl.core.QueryFactory;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
+import noprobro.shop.product.common.HomeProductDto;
 import noprobro.shop.product.common.ProductSearchDto;
+import noprobro.shop.product.common.QHomeProductDto;
 import noprobro.shop.product.domain.Product;
 import noprobro.shop.product.domain.QProduct;
+import noprobro.shop.product.domain.QProductImg;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.thymeleaf.util.StringUtils;
 
 import java.time.LocalDateTime;
@@ -63,6 +68,38 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
 
     long total = results.getTotal();
 
+    return new PageImpl<>(content, pageable, total);
+  }
+
+  private BooleanExpression productNameLike(String searchQuery) {
+    return StringUtils.isEmpty(searchQuery) ? null
+        : QProduct.product.name.like("%" + searchQuery + "%");
+  }
+
+  @Override
+  public Page<HomeProductDto> getHomeProductPage(ProductSearchDto productSearchDto, Pageable pageable) {
+    QProduct product = QProduct.product;
+    QProductImg productImg = QProductImg.productImg;
+
+    QueryResults<HomeProductDto> results = jpaQueryFactory
+        .select(
+            new QHomeProductDto(
+                product.name,
+                product.price,
+                product.category,
+                product.detail)
+        )
+        .from(productImg)
+        .join(productImg.product, product)
+        .where(productImg.repImgYn.eq("Y"))
+        .where(productNameLike((productSearchDto.getSearchQuery())))
+        .orderBy(product.id.desc())
+        .offset(pageable.getOffset())
+        .limit(pageable.getPageSize())
+        .fetchResults();
+
+    List<HomeProductDto> content = results.getResults();
+    long total = results.getTotal();
     return new PageImpl<>(content, pageable, total);
   }
 }

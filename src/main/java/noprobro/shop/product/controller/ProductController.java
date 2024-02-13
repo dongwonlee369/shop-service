@@ -32,11 +32,6 @@ public class ProductController {
     return "admins/addProduct";
   }
 
-//  @GetMapping("/manage")
-//  public String manageProduct() {
-//    return "admins/manageProduct";
-//  }
-
   @PostMapping("/add")
   public String addProduct(@Valid ProductFormDto productFormDto, BindingResult bindingResult, Model model, @RequestParam(name = "productImgFile") List<MultipartFile> productImgFileList) {
     if (bindingResult.hasErrors()) {
