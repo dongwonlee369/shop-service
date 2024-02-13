@@ -13,15 +13,16 @@
           bindDomEvent();
       });
 
-      function page(page) {
+      function page(pageNumber) {
           let searchDateType = $("#searchDateType").val();
           let searchBy = $("#searchBy").val();
           let searchQuery = $("#searchQuery").val();
 
-          location.href = "/products/`manage/" + page + "?searchDateType=" + searchDateType
+          location.href = "/products/manage/" + pageNumber + "?searchDateType=" + searchDateType
               + "&searchBy=" + searchBy
               + "&searchQuery=" + searchQuery;
       }
+
   </script>
 </th:block>
 
@@ -71,7 +72,7 @@
         <!--페이지 요소들-->
         <li class="page-product" th:each="page: ${#numbers.sequence(start, end)}"
             th:classappend="${products.number eq (page - 1)}?'active':''">
-          <a th:onclick="'javascript:page(' + (page - 1) + ')'" th:inline="text" class="page-link"
+          <a th:onclick="'javascript:page(' + (${page} - 1) + ')'" th:inline="text" class="page-link"
              style="cursor : pointer;">[[${page}]]</a>
         </li>
         <!--Next 다음 버튼-->
@@ -81,6 +82,7 @@
             <span aria-hidden='true'>다음</span>
           </a>
         </li>
+
       </ul>
     </div>
 
